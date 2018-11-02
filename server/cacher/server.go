@@ -2,6 +2,7 @@ package cacher
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -11,13 +12,19 @@ import (
 	"go.uber.org/zap"
 )
 
-// Server is server that set cache
-type Server struct {
-	ctx           context.Context
-	snapshotCache cache.SnapshotCache
-	conf          *config.Cacher
-	logger        *zap.Logger
-}
+type (
+	// Server is server that set cache
+	Server struct {
+		ctx           context.Context
+		snapshotCache cache.SnapshotCache
+		conf          *config.Cacher
+		logger        *zap.Logger
+	}
+
+	exception struct {
+		Message string `json:"message"`
+	}
+)
 
 // NewServer generates a Server
 func NewServer(ctx context.Context, sc cache.SnapshotCache, conf *config.Cacher, l *zap.Logger) *Server {
@@ -55,13 +62,31 @@ func (s *Server) Run() {
 func (s *Server) putResources(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	nodeType := ps.ByName("node_type")
 	if nodeType == "" {
-		// FIXME: ハンドリング
+		msg := "Node type does not exist in path"
+		s.logger.Error(msg)
+		w.WriteHeader(400)
+		writeJSON(w, exception{Message: msg})
 		return
 	}
 
 	c := cacher{snapshotCache: s.snapshotCache}
 	if err := c.setSnapshot(nodeType, r.Body); err != nil {
-		// FIXME: ハンドリング
+		msg := "Faild to cache resources"
+		s.logger.Error(msg, zap.Error(err), zap.Any("node_type", nodeType))
+		w.WriteHeader(500)
+		writeJSON(w, exception{Message: msg})
 		return
 	}
+	w.WriteHeader(200)
+	w.Write([]byte("true"))
+}
+
+func writeJSON(w http.ResponseWriter, res interface{}) error {
+	w.Header().Set("Content-Type", "application/json")
+	r, err := json.MarshalIndent(res, "", "  ")
+	if err != nil {
+		return err
+	}
+	w.Write(r)
+	return nil
 }
