@@ -1,0 +1,44 @@
+version: '2'
+
+services:
+  sxds:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/go/src/github.com/nakabonne/sxds
+    environment:
+      - SXDS_ENV=develop
+      - SXDS_XDS_PORT=8081
+    expose: [8081]
+    ports:
+      - 28081:8081
+    networks:
+      control-plane:
+        ipv4_address: 10.5.0.2
+
+  envoy-app1:
+    build:
+      context: .
+      dockerfile: Dockerfile-envoy
+    depends_on:
+      - sxds
+    volumes:
+      - ./sample/envoy/envoy.yml:/etc/envoy.yaml
+    command: "/usr/local/bin/envoy  -c /etc/envoy.yaml -l trace --service-cluster app1 --service-node sidecar-1"
+    expose:
+      - "80"
+      - "8001"
+    ports:
+      - 28001:8001
+    networks:
+      control-plane:
+        ipv4_address: 10.5.0.3
+
+networks:
+  control-plane:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16
+          gateway: 10.5.0.1
