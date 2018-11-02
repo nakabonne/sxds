@@ -38,7 +38,7 @@ func (s *Server) Run() {
 
 	defer s.logger.Sync()
 
-	router.PUT("/resources/:node_type", putResources)
+	router.PUT("/resources/:node_type", s.putResources)
 	go func(p int, r *httprouter.Router) {
 		if err := http.ListenAndServe(fmt.Sprintf(":%d", p), r); err != nil {
 			// TODO: error handling
@@ -52,5 +52,16 @@ func (s *Server) Run() {
 	return
 }
 
-func putResources(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func (s *Server) putResources(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	nodeType := ps.ByName("node_type")
+	if nodeType == "" {
+		// FIXME: ハンドリング
+		return
+	}
+
+	c := cacher{snapshotCache: s.snapshotCache}
+	if err := c.setSnapshot(nodeType, r.Body); err != nil {
+		// FIXME: ハンドリング
+		return
+	}
 }
