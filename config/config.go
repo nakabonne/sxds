@@ -7,7 +7,8 @@ import (
 type (
 	// Config is config for sxds
 	Config struct {
-		Env string `envconfig:"ENV" default:"develop"`
+		Env     string `envconfig:"ENV" default:"develop"`
+		AdsMode bool   `envconfig:"ADS_MODE" default:"false"`
 
 		Xds
 		Cacher

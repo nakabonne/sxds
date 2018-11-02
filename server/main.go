@@ -29,10 +29,7 @@ func main() {
 	}
 	defer logger.Sync()
 
-	// FIXME: ADSモードをフラグで制御。下記参照
-	// https://github.com/envoyproxy/data-plane-api/blob/master/XDS_PROTOCOL.md#aggregated-discovery-services-ads
-	isAds := false
-	snapshotCache := cache.NewSnapshotCache(isAds, domain.Hasher{}, &snapshotLogger{})
+	snapshotCache := cache.NewSnapshotCache(conf.AdsMode, domain.Hasher{}, &snapshotLogger{})
 
 	xdsServer := xds.NewServer(ctx, snapshotCache, &conf.Xds, logger)
 	grpcServer, err := xdsServer.Run()

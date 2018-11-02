@@ -41,6 +41,7 @@ func (s *Server) Run() {
 	router.PUT("/resources/:node_type", putResources)
 	go func(p int, r *httprouter.Router) {
 		if err := http.ListenAndServe(fmt.Sprintf(":%d", p), r); err != nil {
+			// TODO: error handling
 			s.logger.Error("cacher server closed", zap.Error(err))
 		}
 	}(conf.Cacher.Port, router)
