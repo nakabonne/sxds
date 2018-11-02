@@ -10,11 +10,17 @@ type (
 		Env string `envconfig:"ENV" default:"develop"`
 
 		Xds
+		Cacher
 	}
 
 	// Xds is config for xDS server
 	Xds struct {
 		Port int `envconfig:"XDS_PORT" default:"8081"`
+	}
+
+	// Cacher is config for cacher server
+	Cacher struct {
+		Port int `envconfig:"CACHER_PORT" default:"8082"`
 	}
 )
 
