@@ -7,8 +7,10 @@ import (
 	"net/http"
 
 	"github.com/envoyproxy/go-control-plane/pkg/cache"
+	"github.com/gogo/protobuf/jsonpb"
 	"github.com/julienschmidt/httprouter"
 	"github.com/nakabonne/sxds/config"
+	"github.com/nakabonne/sxds/domain"
 	"go.uber.org/zap"
 )
 
@@ -69,8 +71,17 @@ func (s *Server) putResources(w http.ResponseWriter, r *http.Request, ps httprou
 		return
 	}
 
+	resources := &domain.Resources{}
+	if err := jsonpb.Unmarshal(r.Body, resources); err != nil {
+		msg := "Json format is wrong"
+		s.logger.Error(msg, zap.Error(err), zap.Any("node_type", nodeType))
+		w.WriteHeader(400)
+		writeJSON(w, exception{Message: msg})
+		return
+	}
+
 	c := cacher{snapshotCache: s.snapshotCache}
-	if err := c.setSnapshot(nodeType, r.Body); err != nil {
+	if err := c.setSnapshot(nodeType, resources); err != nil {
 		msg := "Faild to cache resources"
 		s.logger.Error(msg, zap.Error(err), zap.Any("node_type", nodeType))
 		w.WriteHeader(500)
