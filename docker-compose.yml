@@ -8,7 +8,7 @@ services:
     volumes:
       - .:/go/src/github.com/nakabonne/sxds
     environment:
-      - SXDS_ENV=develop
+      - SXDS_PRODUCTION=false
       - SXDS_ADS_MODE=false
       - SXDS_XDS_PORT=8081
       - SXDS_CACHER_PORT=8082

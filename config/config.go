@@ -7,8 +7,8 @@ import (
 type (
 	// Config is config for sxds
 	Config struct {
-		Env     string `envconfig:"ENV" default:"develop"`
-		AdsMode bool   `envconfig:"ADS_MODE" default:"false"`
+		Production bool `envconfig:"PRODUCTION" default:"false"`
+		AdsMode    bool `envconfig:"ADS_MODE" default:"false"`
 
 		Xds
 		Cacher
@@ -35,5 +35,5 @@ func New() (*Config, error) {
 }
 
 func (c *Config) IsProduction() bool {
-	return c.Env == "production"
+	return c.Production
 }
