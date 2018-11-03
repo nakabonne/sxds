@@ -9,10 +9,15 @@ services:
       - .:/go/src/github.com/nakabonne/sxds
     environment:
       - SXDS_ENV=develop
+      - SXDS_ADS_MODE=false
       - SXDS_XDS_PORT=8081
-    expose: [8081]
+      - SXDS_CACHER_PORT=8082
+    expose:
+      - "8081"
+      - "8082"
     ports:
       - 28081:8081
+      - 28082:8082
     networks:
       control-plane:
         ipv4_address: 10.5.0.2

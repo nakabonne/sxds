@@ -10,6 +10,7 @@ import (
 	"github.com/envoyproxy/go-control-plane/pkg/cache"
 	"github.com/nakabonne/sxds/config"
 	"github.com/nakabonne/sxds/domain"
+	"github.com/nakabonne/sxds/server/cacher"
 	"github.com/nakabonne/sxds/server/xds"
 	"go.uber.org/zap"
 )
@@ -28,18 +29,16 @@ func main() {
 	}
 	defer logger.Sync()
 
-	// FIXME: ADSモードをフラグで制御。下記参照
-	// https://github.com/envoyproxy/data-plane-api/blob/master/XDS_PROTOCOL.md#aggregated-discovery-services-ads
-	isAds := false
-	snapshotCache := cache.NewSnapshotCache(isAds, domain.Hasher{}, &snapshotLogger{})
+	snapshotCache := cache.NewSnapshotCache(conf.AdsMode, domain.Hasher{}, &snapshotLogger{})
+
 	xdsServer := xds.NewServer(ctx, snapshotCache, &conf.Xds, logger)
-
-	//	xdsServer.RunSnapshotCollector()
-
 	grpcServer, err := xdsServer.Run()
 	if err != nil {
 		panic(err)
 	}
+
+	cacherServer := cacher.NewServer(ctx, snapshotCache, &conf.Cacher, logger)
+	cacherServer.Run()
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGTERM, os.Interrupt)
