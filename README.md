@@ -26,7 +26,7 @@ Please see [Github Releases](https://github.com/nakabonne/sxds/releases).
 
 #### Run
 
-Two servers, [xds](#xds-1) and [cacher](#cacher-1) will listen.
+Two servers, [xds](#xds) and [cacher](#cacher) will listen.
 
 ```sh
 $ /path/to/sxds
@@ -34,16 +34,17 @@ $ /path/to/sxds
 
 #### Set resources
 
-Put json which becomes resources under `resources/{node_type}`.  
-Put each [node type](#terms).  
-Please create json file with reference to [sample](https://github.com/nakabonne/sxds/tree/master/sample/resource).
+sxds caches resources and returns DiscoverResponse for data-plane.  
+so you need to put the json file to the [cacher server](#cacher).  
+   
+Please create json file with reference to [sample](https://github.com/nakabonne/sxds/tree/master/sample/resource) and put json to the path `resources/{node_type}`.  
+Put each [node type](#terms). 
 
 ```
 $ curl -XPUT http://{IP_ADDRESS}:8082/resources/sidecar -d @sidecar.json
 ```
 
-sxds caches resources and returns DiscoverResponse for data-plane.  
-To do so you need to put the json file to the cacher server.  
+ 
 The json format has the same format as DiscoveryResponse in data-plane-api.  
 For DiscoveryResponse, see [proto file](https://github.com/envoyproxy/data-plane-api/tree/master/envoy/api/v2) of data-plane-api.  
 Also do not forget to update the version when updating.
@@ -63,7 +64,7 @@ Please set dynamic_resources and static_resources like [sample](https://github.c
 
 [specification of node id]  
 
-Add node_type to the prefix of the name given to the `--service - node` option.  
+Add node_type to the prefix of the name given to the `--service-node` option.  
 
 ```
 $ envoy --service-node sidecar-1
@@ -101,6 +102,7 @@ REST server that caches resources.
 
 ## TODO
 
-- [ ] make sxdsctl that is cli tool for put resources
+- [ ] Make sxdsctl that is cli tool for put resources
+- [ ] Make detailed documentation on resource json
 - [ ] Automatic generation of resources json
-- [ ] more test...
+- [ ] More test...
