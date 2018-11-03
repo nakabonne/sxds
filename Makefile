@@ -21,3 +21,6 @@ logs:
 
 put-resources:
 	curl -XPUT http://localhost:28082/resources/sidecar -d @sample/resource/sidecar.json
+
+test:
+	go test -v ./...
