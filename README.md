@@ -3,7 +3,7 @@
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](/LICENSE.md)
 
 Simple-xds for data-plane in ServiceMesh.  
-Control-plane with the minimum function.
+This works as control-plane with the minimum function.
 
 ## In the beginning
 
@@ -101,5 +101,6 @@ REST server that caches resources.
 
 ## TODO
 
-[ ] make sxdsctl that is cli tool for put resources  
-[ ] more test
+- [ ] make sxdsctl that is cli tool for put resources
+- [ ] Automatic generation of resources json
+- [ ] more test...
