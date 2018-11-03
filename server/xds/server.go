@@ -13,7 +13,6 @@ import (
 	"go.uber.org/zap"
 
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
 )
 
 // Server is xDS Server
@@ -37,8 +36,6 @@ func NewServer(ctx context.Context, cache cache.SnapshotCache, conf *config.Xds,
 // Run runs xDS gRPC server
 func (s *Server) Run() (*grpc.Server, error) {
 	grpcServer := grpc.NewServer()
-	// FIXME: reflectionを本番導入したときの挙動調査
-	reflection.Register(grpcServer)
 	server := xds.NewServer(s.snapshotCache, nil)
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", s.conf.Port))
 	if err != nil {
