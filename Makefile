@@ -24,3 +24,6 @@ put-resources:
 
 test:
 	go test -v ./...
+
+release:
+	goreleaser --rm-dist
