@@ -76,7 +76,7 @@ func (s *Server) putResources(w http.ResponseWriter, r *http.Request, ps httprou
 		msg := "Json format is wrong"
 		s.logger.Error(msg, zap.Error(err), zap.Any("node_type", nodeType))
 		w.WriteHeader(400)
-		writeJSON(w, exception{Message: msg})
+		writeJSON(w, exception{Message: msg + ": " + err.Error()})
 		return
 	}
 
