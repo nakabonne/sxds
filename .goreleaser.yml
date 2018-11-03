@@ -2,6 +2,7 @@
 # Make sure to check the documentation at http://goreleaser.com
 builds:
   - binary: sxds
+    main: ./server/main.go
     goos:
       - windows
       - darwin
