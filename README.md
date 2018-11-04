@@ -100,8 +100,8 @@ REST server that caches resources.
 
 | term | meaning |
 |:----------|:-----------|
-|node type|The role of node which put each data-plane|
-|resources|Data to use for DiscoveryResponse(e.g. listeners, routes) |
+|node type|The role of node which put each data-plane(e.g. sidecar, router)|
+|resources|Data to use for DiscoveryResponse(e.g. listeners, clusters) |
 
 ## TODO
 
