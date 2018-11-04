@@ -16,21 +16,22 @@ If you want a control-plane with minimal functionality, sxds will be sufficientl
 This xds supports any service proxy that conforms to data-plane-api.  
 Currently only envoy is compliant, but envoy author Matt Klein says in [the blog](https://blog.envoyproxy.io/the-universal-data-plane-api-d15cec7a) that data-plane-api should be generic.
 
-## Getting Started
 
-### Installation
+## Installation
 
 Please see [Github Releases](https://github.com/nakabonne/sxds/releases).
 
-### Usage
+## Usage
 
-#### Run
+### Run
 
 Two servers, [xds](#xds) and [cacher](#cacher) will listen.
 
 ```sh
 $ /path/to/sxds
 ```
+
+### Required settings
 
 #### Set resources
 
@@ -51,14 +52,14 @@ Also do not forget to update the version when updating.
 
 #### Data-Plane settings
 
-[Require]  
+
 In order to suppress memory consumption, sxds cache resources for each node type.  
 And sxds gets node type from node id, so you need to follow the naming convention.  
 Please add node_type to prefix like "sidecar-app1" for naming node id of data-plane.  
 
 ##### e.g.) envoy  
 
-[envoy.yml setting]  
+[envoy-config]
 
 Please set dynamic_resources and static_resources like [sample](https://github.com/nakabonne/sxds/blob/master/sample/envoy/envoy.yml).  
 
@@ -70,9 +71,7 @@ Add node_type to the prefix of the name given to the `--service-node` option.
 $ envoy --service-node sidecar-1
 ```
 
-#### Configration
-
-For ADS mode, please [click](https://github.com/envoyproxy/data-plane-api/blob/master/XDS_PROTOCOL.md#aggregated-discovery-services-ads) here
+### Optional settings
 
 ```sh
 SXDS_PRODUCTION=false # default: false
@@ -80,6 +79,8 @@ SXDS_ADS_MODE=false   # default: false
 SXDS_XDS_PORT=8081    # default: 8081
 SXDS_CACHER_PORT=8082 # default: 8082
 ```
+
+For ADS mode, please [click](https://github.com/envoyproxy/data-plane-api/blob/master/XDS_PROTOCOL.md#aggregated-discovery-services-ads) here
 
 ## Architecture
 
