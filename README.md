@@ -18,6 +18,10 @@ If you want a control-plane with minimal functionality, sxds will be sufficientl
 This xds supports any service proxy that conforms to data-plane-api.  
 Currently only envoy is compliant, but envoy author Matt Klein says in [the blog](https://blog.envoyproxy.io/the-universal-data-plane-api-d15cec7a) that data-plane-api should be generic.
 
+## Feature
+
+- Return resoponse for DiscoveryRequest from data-plane.
+- Cache DiscoveryResponse in memory
 
 ## Installation
 
@@ -82,7 +86,7 @@ SXDS_XDS_PORT=8081    # default: 8081
 SXDS_CACHER_PORT=8082 # default: 8082
 ```
 
-For ADS mode, please [click](https://github.com/envoyproxy/data-plane-api/blob/master/XDS_PROTOCOL.md#aggregated-discovery-services-ads) here
+For ADS mode, please click [here](https://github.com/envoyproxy/data-plane-api/blob/master/XDS_PROTOCOL.md#aggregated-discovery-services-ads)
 
 ## Architecture
 
