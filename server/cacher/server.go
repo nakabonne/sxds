@@ -88,8 +88,9 @@ func (s *Server) putResources(w http.ResponseWriter, r *http.Request, ps httprou
 		writeJSON(w, exception{Message: msg})
 		return
 	}
+	s.logger.Info("Successfully cache resources", zap.String("node type", nodeType))
 	w.WriteHeader(200)
-	w.Write([]byte("true"))
+	w.Write([]byte("true\n"))
 }
 
 func writeJSON(w http.ResponseWriter, res interface{}) error {
