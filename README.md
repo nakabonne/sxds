@@ -7,9 +7,8 @@
 Simple-xds for data-plane in ServiceMesh.  
 This works as control-plane with the minimum function.
 
-## In the beginning
-
-This README is written on the premise that you understand [data-plane-api](https://www.envoyproxy.io/docs/envoy/latest/configuration/overview/v2_overview) to a certain extent.
+  
+This README assumes you're familiar with the [data-plane-api](https://www.envoyproxy.io/docs/envoy/latest/configuration/overview/v2_overview) already
 
 ## Motivation
 In realizing Service Mesh, istio is really a wonderful choice.  
