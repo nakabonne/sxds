@@ -42,7 +42,7 @@ $ go install github.com/nakabonne/sxds/cmd/sxds
 Two servers, [xds](#xds) and [cacher](#cacher) will listen.
 
 ```sh
-$ /path/to/sxds
+$ sxds
 ```
 
 ### Required settings
