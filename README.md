@@ -1,5 +1,6 @@
 # sxds
 
+[![CircleCI](https://circleci.com/gh/nakabonne/sxds.svg?style=svg)](https://circleci.com/gh/nakabonne/sxds)
 [![Release](https://img.shields.io/github/release/nakabonne/sxds.svg?style=flat-square)](https://github.com/nakabonne/sxds/releases/latest)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](/LICENSE.md)
 [![Go Doc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](http://godoc.org/github.com/nakabonne/sxds)
