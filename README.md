@@ -24,7 +24,16 @@ Currently only envoy is compliant, but envoy author Matt Klein says in [the blog
 
 ## Installation
 
+### Binaries
+
 Please see [Github Releases](https://github.com/nakabonne/sxds/releases).
+
+### From source
+
+```
+$ go get -u github.com/nakabonne/sxds
+$ go install github.com/nakabonne/sxds/cmd/sxds
+```
 
 ## Usage
 
