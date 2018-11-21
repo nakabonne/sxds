@@ -30,7 +30,7 @@ services:
       - sxds
     volumes:
       - ./sample/envoy/envoy.yml:/etc/envoy.yaml
-    command: "/usr/local/bin/envoy  -c /etc/envoy.yaml -l trace --service-cluster app1 --service-node sidecar-1"
+    command: "/usr/local/bin/envoy -c /etc/envoy.yaml -l trace --service-cluster app1 --service-node sidecar-1"
     expose:
       - "80"
       - "8001"

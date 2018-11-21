@@ -7,7 +7,7 @@ WORKDIR /go/src/github.com/nakabonne/sxds
 COPY . /go/src/github.com/nakabonne/sxds
 
 RUN  apk add --no-cache make git \
-     && cd server \
+     && cd cmd/sxds \
      && go build -o sxds \
      && mv ./sxds /usr/local/bin
 
