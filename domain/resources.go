@@ -19,3 +19,5 @@ type Resources struct {
 func (m *Resources) Reset()         { *m = Resources{} }
 func (m *Resources) String() string { return proto.CompactTextString(m) }
 func (*Resources) ProtoMessage()    {}
+
+var _ proto.Message = (*Resources)(nil)
