@@ -1,0 +1,41 @@
+defaults: &defaults
+  working_directory: /go/src/github.com/nakabonne/sxds
+  docker:
+    - image: circleci/golang:1.11
+
+version: 2
+jobs:
+  test:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          key: vendor-{{ checksum "Gopkg.lock" }}
+      - run:
+          name: Setup For Test
+          command: |
+            make prepare
+      - run:
+          name: Install dependencies
+          command: |
+            if [ ! -e vendor ]; then
+              dep ensure
+            fi
+      - run:
+          name: Run tests
+          command: |
+            make test
+      - save_cache:
+          key: vendor-{{ checksum "Gopkg.lock" }}
+          paths:
+            - vendor
+workflows:
+  version: 2
+  test_and_deploy:
+    jobs:
+      - test:
+          filters:
+            branches:
+              only: /.*/
+            tags:
+              only: /.*/
