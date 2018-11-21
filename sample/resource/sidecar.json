@@ -3,10 +3,10 @@
 
   "listeners": [
     {
-      "name": "listener1",
+      "name": "listener-sidecar",
       "address": {
         "socket_address": {
-          "address": "127.0.0.1",
+          "address": "0.0.0.0",
           "port_value": 10000
         }
       },
@@ -16,11 +16,10 @@
             {
               "name": "envoy.http_connection_manager",
               "config": {
-                "http_filters": [
-                  {
-                    "name": "envoy.router"
-                  }
-                ],
+                "codec_type": "auto",
+                "stat_prefix": "ingress_http",
+                "idle_timeout": "60s",
+                "drain_timeout": "5s",
                 "rds": {
                   "config_source": {
                     "api_config_source": {
@@ -36,21 +35,33 @@
                   },
                   "route_config_name": "local_route"
                 },
-                "stat_prefix": "ingress_http",
-                "tracing": {}
+                "access_log": [
+                  {
+                    "name": "envoy.file_access_log",
+                    "config": {
+                      "path": "/dev/stdout"
+                    }
+                  }
+                ],
+                "http_filters": [
+                  {
+                    "name": "envoy.router",
+                    "config": {}
+                  }
+                ]
               }
             }
           ]
         }
-      ],
-      "listener_filters": [],
-      "socket_options": []
+      ]
     }
   ],
 
   "clusters": [
     {
-      "name": "cluster1",
+      "name": "local_service",
+      "http2_protocol_options": {},
+      "connect_timeout": "0.25s",
       "lb_policy": "ROUND_ROBIN",
       "type": "EDS",
       "eds_cluster_config": {
@@ -67,13 +78,21 @@
           }
         }
       },
-      "connect_timeout": "1s"
+      "health_checks": [
+        {
+          "timeout": "5s",
+          "interval": "10s",
+          "unhealthy_threshold": 2,
+          "healthy_threshold": 2,
+          "tcp_health_check": {}
+        }
+      ]
     }
   ],
 
   "endpoints": [
     {
-      "cluster_name": "cluster1",
+      "cluster_name": "local_service",
       "endpoints": [
         {
           "lb_endpoints": [
@@ -82,7 +101,7 @@
                 "address": {
                   "socket_address": {
                     "address": "127.0.0.1",
-                    "port_value": 10000
+                    "port_value": 8080
                   }
                 }
               }
@@ -95,10 +114,10 @@
 
   "routes": [
     {
-      "name": "route1",
+      "name": "local_route",
       "virtual_hosts": [
         {
-          "name": "virtual_host1",
+          "name": "service",
           "domains": [
             "*"
           ],
@@ -106,6 +125,9 @@
             {
               "match": {
                 "prefix": "/"
+              },
+              "route": {
+                "cluster": "local_service"
               }
             }
           ]
