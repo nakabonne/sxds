@@ -47,22 +47,17 @@ $ sxds
 
 ### Required settings
 
+There are only two things you have to do beforehand.
+
 #### Set resources
 
 sxds caches resources and returns DiscoverResponse for data-plane.  
-so you need to put the json file to the [cacher server](#cacher).  
-   
-Please create json file with reference to [sample](https://github.com/nakabonne/sxds/tree/master/sample/resource) and put json to the path `resources/{node_type}`.  
-Put each [node type](#terms). 
+so you need to send the json file to the [cacher server](#cacher).  
+Please create json while referring to the [document](https://github.com/nakabonne/sxds/tree/master/doc/RESOURCES.md).
 
 ```
 $ curl -XPUT http://{IP_ADDRESS}:8082/resources/sidecar -d @sidecar.json
 ```
-
- 
-The json format has the same format as DiscoveryResponse in data-plane-api.  
-For DiscoveryResponse, see [proto file](https://github.com/envoyproxy/data-plane-api/tree/master/envoy/api/v2) of data-plane-api.  
-Also do not forget to update the version when updating.
 
 #### Data-Plane settings
 
@@ -82,7 +77,7 @@ Please set dynamic_resources and static_resources like [sample](https://github.c
 Add node_type to the prefix of the name given to the `--service-node` option.  
 
 ```
-$ envoy --service-node sidecar-1
+$ envoy --service-node sidecar-app1 --service-cluster app1
 ```
 
 ### Optional settings
@@ -117,7 +112,7 @@ REST server that caches resources.
 
 ## TODO
 
+- [x] Make detailed documentation on resource json
 - [ ] Make sxdsctl that is cli tool for put resources
-- [ ] Make detailed documentation on resource json
 - [ ] Automatic generation of resources json
 - [ ] More test...
