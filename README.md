@@ -7,7 +7,8 @@
 
 Simple xds for data-plane in ServiceMesh.  
 This enables service discovery, dynamic updates to load balancing pools and routing tables.  
-This supports any data-plane that conforms to data-plane-api.
+This supports any data-plane that conforms to data-plane-api.  
+The communication protocol with data-plane is supported only by gRPC.
 
   
 This README assumes you're familiar with the [data-plane-api](https://www.envoyproxy.io/docs/envoy/latest/configuration/overview/v2_overview) already
