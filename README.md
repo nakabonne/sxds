@@ -118,5 +118,6 @@ REST server that caches resources.
 
 - [x] Make detailed documentation on resource json
 - [ ] Make sxdsctl that is cli tool for put resources
+- [ ] Update to be available synchronous (long) polling via REST endpoints 
 - [ ] Automatic generation of resources json
 - [ ] More test...
