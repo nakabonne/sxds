@@ -5,23 +5,25 @@
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](/LICENSE.md)
 [![Go Doc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](http://godoc.org/github.com/nakabonne/sxds)
 
-Simple-xds for data-plane in ServiceMesh.  
-This works as control-plane with the minimum function.
+Simple xds for data-plane in ServiceMesh.  
+This enables service discovery, dynamic updates to load balancing pools and routing tables.  
+This supports any data-plane that conforms to data-plane-api.
 
   
 This README assumes you're familiar with the [data-plane-api](https://www.envoyproxy.io/docs/envoy/latest/configuration/overview/v2_overview) already
 
 ## Motivation
-In realizing Service Mesh, istio is really a wonderful choice.  
-But istio is big and complicated!  
-If you want a control-plane with minimal functionality, sxds will be sufficiently effective.  
-This xds supports any service proxy that conforms to data-plane-api.  
-Currently only envoy is compliant, but envoy author Matt Klein says in [the blog](https://blog.envoyproxy.io/the-universal-data-plane-api-d15cec7a) that data-plane-api should be generic.
+Using an orchestration tool makes it possible to achieve Service Mesh relatively easily.  
+But if you don't use it, you can't benefit from a great tool such as Istio!  
+If you want to realize Service Mesh in such an environment, sxds is one of effective methods.  
 
 ## Feature
 
-- Return resoponse for DiscoveryRequest from data-plane.
-- Cache DiscoveryResponse in memory
+- Provides policy and configuration for all of the running data planes
+  - Listener discovery service ([LDS](https://www.envoyproxy.io/docs/envoy/latest/configuration/listeners/lds))
+  - Cluster discovery service ([CDS](https://www.envoyproxy.io/docs/envoy/latest/configuration/cluster_manager/cds))
+  - Route discovery service ([RDS](https://www.envoyproxy.io/docs/envoy/latest/configuration/http_conn_man/rds))
+  - Endpoint discovery service ([EDS](https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/eds.proto#envoy-api-file-envoy-api-v2-eds-proto))
 
 ## Installation
 
@@ -67,11 +69,12 @@ In order to suppress memory consumption, sxds cache resources for each node type
 And sxds gets node type from node id, so you need to follow the naming convention.  
 Please add node_type to prefix like "sidecar-app1" for naming node id of data-plane.  
 
-##### e.g.) envoy  
+##### envoy  
 
 [envoy-config]
 
-Please set dynamic_resources and static_resources like [sample](https://github.com/nakabonne/sxds/blob/master/sample/envoy/envoy.yml).  
+Add sxds cluster to static_resources and　specify it in dynamic_resources.  
+See [sample](https://github.com/nakabonne/sxds/blob/master/sample/envoy/envoy.yml).  
 
 [specification of node id]  
 
