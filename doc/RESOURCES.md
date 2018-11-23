@@ -9,7 +9,7 @@ The following fields must be set.
 
 ## Four fields required for DiscoveryResponse
 
-- [listenrs](https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/lds.proto#envoy-api-msg-listener)
+- [listeners](https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/lds.proto#envoy-api-msg-listener)
 - [clusters](https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/cds.proto#cluster)
 - [endpoints](https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/eds.proto#envoy-api-msg-clusterloadassignment)
 - [routes](https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/rds.proto#routeconfiguration)
