@@ -74,7 +74,7 @@ Please add node_type to prefix like "sidecar-app1" for naming node id of data-pl
 
 [envoy-config]
 
-Add sxds cluster to static_resources and　specify it in dynamic_resources.  
+Add sxds cluster to static_resources and specify it in dynamic_resources.  
 See [sample](https://github.com/nakabonne/sxds/blob/master/sample/envoy/envoy.yml).  
 
 [specification of node id]  
