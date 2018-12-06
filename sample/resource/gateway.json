@@ -1,0 +1,249 @@
+{
+  "listeners": [
+    {
+      "name": "listener-foo-gateway-ingress",
+      "address": {
+        "socket_address": {
+          "address": "0.0.0.0",
+          "port_value": 10000
+        }
+      },
+      "filter_chains": [
+        {
+          "filters": [
+            {
+              "name": "envoy.http_connection_manager",
+              "config": {
+                "codec_type": "auto",
+                "stat_prefix": "ingress_http",
+                "idle_timeout": "60s",
+                "drain_timeout": "5s",
+                "rds": {
+                  "config_source": {
+                    "api_config_source": {
+                      "api_type": "GRPC",
+                      "grpc_services": [
+                        {
+                          "envoy_grpc": {
+                            "cluster_name": "xds_cluster"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "route_config_name": "ingress_route"
+                },
+                "access_log": [
+                  {
+                    "name": "envoy.file_access_log",
+                    "config": {
+                      "path": "/dev/stdout"
+                    }
+                  }
+                ],
+                "http_filters": [
+                  {
+                    "name": "envoy.router",
+                    "config": {}
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "listener-foo-gateway-egress",
+      "address": {
+        "socket_address": {
+          "address": "127.0.0.1",
+          "port_value": 9090
+        }
+      },
+      "filter_chains": [
+        {
+          "filters": [
+            {
+              "name": "envoy.http_connection_manager",
+              "config": {
+                "codec_type": "auto",
+                "stat_prefix": "egress_http",
+                "idle_timeout": "60s",
+                "drain_timeout": "5s",
+                "rds": {
+                  "config_source": {
+                    "api_config_source": {
+                      "api_type": "GRPC",
+                      "grpc_services": [
+                        {
+                          "envoy_grpc": {
+                            "cluster_name": "xds_cluster"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "route_config_name": "egress_route"
+                },
+                "access_log": [
+                  {
+                    "name": "envoy.file_access_log",
+                    "config": {
+                      "path": "/dev/stdout"
+                    }
+                  }
+                ],
+                "http_filters": [
+                  {
+                    "name": "envoy.router",
+                    "config": {}
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "clusters": [
+    {
+      "name": "local_service",
+      "connect_timeout": "0.25s",
+      "lb_policy": "ROUND_ROBIN",
+      "type": "EDS",
+      "eds_cluster_config": {
+        "eds_config": {
+          "api_config_source": {
+            "api_type": "GRPC",
+            "grpc_services": [
+              {
+                "envoy_grpc": {
+                  "cluster_name": "xds_cluster"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "health_checks": [
+        {
+          "timeout": "5s",
+          "interval": "10s",
+          "unhealthy_threshold": 2,
+          "healthy_threshold": 2,
+          "tcp_health_check": {}
+        }
+      ]
+    },
+    {
+      "name": "foo_service",
+      "http2_protocol_options": {},
+      "connect_timeout": "0.25s",
+      "lb_policy": "ROUND_ROBIN",
+      "type": "STRICT_DNS",
+      "load_assignment": {
+        "cluster_name": "foo_service",
+        "endpoints": [
+          {
+            "lb_endpoints": [
+              {
+                "endpoint": {
+                  "address": {
+                    "socket_address": {
+                      "address": "development.foo.service.consul",
+                      "port_value": 10000
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "health_checks": [
+        {
+          "timeout": "5s",
+          "interval": "10s",
+          "unhealthy_threshold": 2,
+          "healthy_threshold": 2,
+          "tcp_health_check": {}
+        }
+      ],
+      "dns_resolvers": [
+        {
+          "socket_address": {
+            "address": "127.0.0.1",
+            "port_value": 8600
+          }
+        }
+      ]
+    }
+  ],
+  "endpoints": [
+    {
+      "cluster_name": "local_service",
+      "endpoints": [
+        {
+          "lb_endpoints": [
+            {
+              "endpoint": {
+                "address": {
+                  "socket_address": {
+                    "address": "127.0.0.1",
+                    "port_value": 3000
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "name": "ingress_route",
+      "virtual_hosts": [
+        {
+          "name": "service",
+          "domains": [
+            "*"
+          ],
+          "routes": [
+            {
+              "match": {
+                "prefix": "/"
+              },
+              "route": {
+                "cluster": "local_service"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "egress_route",
+      "virtual_hosts": [
+        {
+          "name": "foo",
+          "domains": [
+            "*"
+          ],
+          "routes": [
+            {
+              "match": {
+                "prefix": "/foo"
+              },
+              "route": {
+                "cluster": "foo_service"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
