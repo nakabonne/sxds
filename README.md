@@ -6,12 +6,11 @@
 [![Go Doc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](http://godoc.org/github.com/nakabonne/sxds)
 
 Simple xds for data-plane in ServiceMesh.  
-This enables service discovery, dynamic updates to load balancing pools and routing tables.  
-This supports any data-plane that conforms to data-plane-api.  
+Sxds enables service discovery, dynamic updates to load balancing pools and routing tables, and supports any data-plane that conforms to data-plane-api.  
 The communication protocol with data-plane is supported only by gRPC.
 
   
-This README assumes you're familiar with the [data-plane-api](https://www.envoyproxy.io/docs/envoy/latest/configuration/overview/v2_overview) already
+This README assumes you're familiar with the [data-plane-api](https://www.envoyproxy.io/docs/envoy/latest/configuration/overview/v2_overview) already.
 
 ## Motivation
 Using an orchestration tool makes it possible to achieve Service Mesh relatively easily.  
